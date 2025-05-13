@@ -2,7 +2,13 @@
   "name": "translation-helper",
   "displayName": "Translation Helper",
   "description": "Helps with looking up translations in your localization files",
-  "version": "0.0.3",
+  "version": "0.1.0",
+  "icon": "images/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://https://github.com/HarmCoxFCTRY/translation-helper"
+  },
+  "license": "MIT",
   "engines": {
     "vscode": "^1.60.0"
   },
