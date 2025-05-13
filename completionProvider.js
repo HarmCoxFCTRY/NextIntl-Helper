@@ -43,54 +43,103 @@ const completionProvider = {
       // Create completion items for matching keys
       const completionItems = [];
 
+      // Normalize the partial key by removing trailing dot for comparison
+      // but keep the original for range calculation
+      const normalizedPartialKey = partialKey.replace(/\.$/, "");
+
       if (partialKey) {
-        // Filter keys based on what user has typed
-        const matchingKeys = allKeys.filter((entry) =>
-          entry.key.startsWith(partialKey)
+        // Filter keys based on what user has typed (normalized for comparison)
+        const matchingKeys = allKeys.filter(
+          (entry) =>
+            entry.key.startsWith(normalizedPartialKey) &&
+            (entry.key.length > normalizedPartialKey.length ||
+              normalizedPartialKey === "")
         );
 
-        // Group keys by their next segment
-        const keySegments = {};
+        // Find direct children of the current path
+        const currentSegments = normalizedPartialKey.split(".");
+        const directChildren = new Set();
         const exactMatches = [];
 
         matchingKeys.forEach((entry) => {
-          // Handle the case where the partial key is already a complete key
-          if (entry.key === partialKey) {
+          // Handle the case where the normalized partial key is already a complete key
+          if (entry.key === normalizedPartialKey) {
             exactMatches.push(entry);
             return;
           }
 
-          // Get the next segment after the partial key
-          const remainingPath = entry.key.substring(partialKey.length);
-          const nextSegment = remainingPath.split(".")[1]; // Get first segment after what's typed
+          const entrySegments = entry.key.split(".");
 
-          if (nextSegment) {
-            // Add unique segments
-            const fullSegment =
-              partialKey + (partialKey.endsWith(".") ? "" : ".") + nextSegment;
-            keySegments[fullSegment] = true;
-          } else if (remainingPath.startsWith(".")) {
-            // This is a direct child of the partial path
-            exactMatches.push(entry);
+          // If the entry is a direct child or grandchild of the current path
+          if (entrySegments.length > currentSegments.length) {
+            // Make sure all existing segments match
+            let isMatch = true;
+            for (let i = 0; i < currentSegments.length; i++) {
+              if (currentSegments[i] !== entrySegments[i]) {
+                isMatch = false;
+                break;
+              }
+            }
+
+            if (isMatch) {
+              // Get the next segment
+              const nextSegment = entrySegments[currentSegments.length];
+
+              if (nextSegment) {
+                // Build the segment path up to and including the next segment
+                let segmentPath = "";
+                for (let i = 0; i <= currentSegments.length; i++) {
+                  if (i > 0) segmentPath += ".";
+                  segmentPath += entrySegments[i];
+                }
+
+                directChildren.add(segmentPath);
+              }
+            }
           }
         });
 
-        // Add segment completions
-        Object.keys(keySegments).forEach((segment) => {
+        // Add direct children as completion items
+        directChildren.forEach((segment) => {
+          // Check if this segment has children (is a category)
+          const hasChildren = matchingKeys.some(
+            (entry) =>
+              entry.key.startsWith(segment + ".") && entry.key !== segment
+          );
+
           const item = new vscode.CompletionItem(
             segment,
-            vscode.CompletionItemKind.Module
+            hasChildren
+              ? vscode.CompletionItemKind.Module
+              : vscode.CompletionItemKind.Property
           );
+
           // Use a snippet insert to replace the entire key text
           item.insertText = new vscode.SnippetString(segment);
+
           // Set the range to replace the entire key text
           const startPos = position.translate(0, -partialKey.length);
           item.range = new vscode.Range(startPos, position);
-          item.detail = "Translation Key Segment";
-          item.command = {
-            command: "editor.action.triggerSuggest",
-            title: "Re-trigger completions",
-          };
+
+          item.detail = hasChildren
+            ? "Translation Category"
+            : "Translation Key";
+
+          if (hasChildren) {
+            item.command = {
+              command: "editor.action.triggerSuggest",
+              title: "Re-trigger completions",
+            };
+          }
+
+          // If the segment has a value in the translations
+          const segmentValue = allKeys.find((k) => k.key === segment)?.value;
+          if (segmentValue) {
+            item.documentation = new vscode.MarkdownString(
+              `**${referenceLang}:** ${segmentValue}`
+            );
+          }
+
           completionItems.push(item);
         });
 
@@ -113,25 +162,48 @@ const completionProvider = {
         });
       } else {
         // No partial key, suggest all top-level segments
-        const topLevelSegments = {};
+        const topLevelSegments = new Set();
 
         allKeys.forEach((entry) => {
           const firstSegment = entry.key.split(".")[0];
-          topLevelSegments[firstSegment] = true;
+          topLevelSegments.add(firstSegment);
         });
 
-        Object.keys(topLevelSegments).forEach((segment) => {
+        topLevelSegments.forEach((segment) => {
+          // Check if this segment has children
+          const hasChildren = allKeys.some(
+            (entry) =>
+              entry.key.startsWith(segment + ".") && entry.key !== segment
+          );
+
           const item = new vscode.CompletionItem(
             segment,
-            vscode.CompletionItemKind.Module
+            hasChildren
+              ? vscode.CompletionItemKind.Module
+              : vscode.CompletionItemKind.Property
           );
+
           // For empty string, just insert the segment
           item.insertText = segment;
-          item.detail = "Translation Key Segment";
-          item.command = {
-            command: "editor.action.triggerSuggest",
-            title: "Re-trigger completions",
-          };
+          item.detail = hasChildren
+            ? "Translation Category"
+            : "Translation Key";
+
+          if (hasChildren) {
+            item.command = {
+              command: "editor.action.triggerSuggest",
+              title: "Re-trigger completions",
+            };
+          }
+
+          // If the segment has a value in the translations
+          const segmentValue = allKeys.find((k) => k.key === segment)?.value;
+          if (segmentValue) {
+            item.documentation = new vscode.MarkdownString(
+              `**${referenceLang}:** ${segmentValue}`
+            );
+          }
+
           completionItems.push(item);
         });
       }
