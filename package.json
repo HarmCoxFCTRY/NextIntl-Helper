@@ -1,8 +1,9 @@
 {
-  "name": "translation-helper",
-  "displayName": "Translation Helper",
-  "description": "Helps with looking up translations in your localization files",
+  "name": "next-intl-helper",
+  "displayName": "NextIntl Helper",
+  "description": "Helps with looking up translations and managing keys in your Next.js projects using Next Intl",
   "version": "0.1.0",
+  "publisher": "HarmCox",
   "icon": "images/icon.png",
   "repository": {
     "type": "git",
@@ -25,59 +26,59 @@
   "contributes": {
     "commands": [
       {
-        "command": "translationHelper.showTranslation",
+        "command": "nextIntlHelper.showTranslation",
         "title": "Show Translation"
       },
       {
-        "command": "translationHelper.insertTranslationKey",
+        "command": "nextIntlHelper.insertTranslationKey",
         "title": "Insert Translation Key"
       },
       {
-        "command": "translationHelper.addTranslationKey",
+        "command": "nextIntlHelper.addTranslationKey",
         "title": "Add Translation Key"
       },
       {
-        "command": "translationHelper.addTranslationKeyFromHover",
+        "command": "nextIntlHelper.addTranslationKeyFromHover",
         "title": "Add Translation Key From Hover"
       },
       {
-        "command": "translationHelper.addMissingTranslationsFromHover",
+        "command": "nextIntlHelper.addMissingTranslationsFromHover",
         "title": "Add Missing Translations From Hover"
       },
       {
-        "command": "translationHelper.highlightUntranslated",
+        "command": "nextIntlHelper.highlightUntranslated",
         "title": "Highlight Untranslated Text"
       },
       {
-        "command": "translationHelper.translateText",
+        "command": "nextIntlHelper.translateText",
         "title": "Translate Selected Text"
       },
       {
-        "command": "translationHelper.findKeyForText",
+        "command": "nextIntlHelper.findKeyForText",
         "title": "Find Translation Key for Text"
       }
     ],
     "keybindings": [
       {
-        "command": "translationHelper.showTranslation",
+        "command": "nextIntlHelper.showTranslation",
         "key": "ctrl+alt+t",
         "mac": "cmd+alt+t",
         "when": "editorTextFocus"
       },
       {
-        "command": "translationHelper.insertTranslationKey",
+        "command": "nextIntlHelper.insertTranslationKey",
         "key": "ctrl+alt+i",
         "mac": "cmd+alt+i",
         "when": "editorTextFocus"
       },
       {
-        "command": "translationHelper.addTranslationKey",
+        "command": "nextIntlHelper.addTranslationKey",
         "key": "ctrl+alt+a",
         "mac": "cmd+alt+a",
         "when": "editorTextFocus"
       },
       {
-        "command": "translationHelper.highlightUntranslated",
+        "command": "nextIntlHelper.highlightUntranslated",
         "key": "ctrl+alt+h",
         "mac": "cmd+alt+h",
         "when": "editorTextFocus"
@@ -86,41 +87,41 @@
     "menus": {
       "editor/context": [
         {
-          "command": "translationHelper.showTranslation",
+          "command": "nextIntlHelper.showTranslation",
           "group": "navigation",
           "when": "editorTextFocus"
         },
         {
-          "command": "translationHelper.insertTranslationKey",
+          "command": "nextIntlHelper.insertTranslationKey",
           "group": "navigation",
           "when": "editorTextFocus"
         },
         {
-          "command": "translationHelper.addTranslationKey",
+          "command": "nextIntlHelper.addTranslationKey",
           "group": "navigation",
           "when": "editorTextFocus"
         },
         {
-          "command": "translationHelper.highlightUntranslated",
+          "command": "nextIntlHelper.highlightUntranslated",
           "group": "navigation",
           "when": "editorTextFocus && editorLangId =~ /(javascript|typescript)(react)?/"
         },
         {
-          "command": "translationHelper.translateText",
+          "command": "nextIntlHelper.translateText",
           "group": "navigation",
           "when": "editorHasSelection && editorLangId =~ /(javascript|typescript)(react)?/"
         }
       ]
     },
     "configuration": {
-      "title": "Translation Helper",
+      "title": "NextIntl Helper",
       "properties": {
-        "translationHelper.autoHighlight": {
+        "nextIntlHelper.autoHighlight": {
           "type": "boolean",
           "default": true,
           "description": "Automatically highlight untranslated text when opening or editing files"
         },
-        "translationHelper.ignoredPatterns": {
+        "nextIntlHelper.ignoredPatterns": {
           "type": "array",
           "default": [
             "className",
@@ -136,12 +137,12 @@
           ],
           "description": "Patterns to ignore when highlighting untranslated text"
         },
-        "translationHelper.translationFunction": {
+        "nextIntlHelper.translationFunction": {
           "type": "string",
           "default": "t",
           "description": "The name of the translation function used in your code (e.g., 't', 'i18n.t')"
         },
-        "translationHelper.translationFilePatterns": {
+        "nextIntlHelper.translationFilePatterns": {
           "type": "array",
           "default": [
             "**/messages/*.json",
