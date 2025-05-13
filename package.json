@@ -2,7 +2,7 @@
   "name": "translation-helper",
   "displayName": "Translation Helper",
   "description": "Helps with looking up translations in your localization files",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.60.0"
   },
@@ -25,6 +25,18 @@
       {
         "command": "translationHelper.insertTranslationKey",
         "title": "Insert Translation Key"
+      },
+      {
+        "command": "translationHelper.addTranslationKey",
+        "title": "Add Translation Key"
+      },
+      {
+        "command": "translationHelper.addTranslationKeyFromHover",
+        "title": "Add Translation Key From Hover"
+      },
+      {
+        "command": "translationHelper.addMissingTranslationsFromHover",
+        "title": "Add Missing Translations From Hover"
       }
     ],
     "keybindings": [
@@ -39,6 +51,12 @@
         "key": "ctrl+alt+i",
         "mac": "cmd+alt+i",
         "when": "editorTextFocus"
+      },
+      {
+        "command": "translationHelper.addTranslationKey",
+        "key": "ctrl+alt+a",
+        "mac": "cmd+alt+a",
+        "when": "editorTextFocus"
       }
     ],
     "menus": {
@@ -52,8 +70,24 @@
           "command": "translationHelper.insertTranslationKey",
           "group": "navigation",
           "when": "editorTextFocus"
+        },
+        {
+          "command": "translationHelper.addTranslationKey",
+          "group": "navigation",
+          "when": "editorTextFocus"
         }
       ]
     }
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.60.0",
+    "@types/node": "^16.11.7",
+    "eslint": "^8.2.0",
+    "vscode-test": "^1.6.1"
   }
 }
