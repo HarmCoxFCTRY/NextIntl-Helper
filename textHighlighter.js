@@ -27,10 +27,6 @@ function setupDecorationTypes() {
     overviewRulerColor: "#FFDC00",
     overviewRulerLane: vscode.OverviewRulerLane.Right,
     cursor: "pointer",
-    after: {
-      contentText: " 💡",
-      color: "#AA8800",
-    },
   });
 
   // Decoration for text that exists in translation files (blue background)
@@ -41,10 +37,6 @@ function setupDecorationTypes() {
       borderRadius: "2px",
       overviewRulerColor: "#6699cc",
       overviewRulerLane: vscode.OverviewRulerLane.Right,
-      after: {
-        contentText: " 🔍",
-        color: "#6699cc",
-      },
     });
 }
 
@@ -204,20 +196,22 @@ async function highlightUntranslatedText(editor) {
     const untranslatedRanges = [];
     const existingTranslationRanges = [];
 
-    // Find text between > and < (JSX text content), with improved direct approach
-    const jsxTextRegex = />([^<>{]*?)</g;
+    // Find text between > and < (JSX text content), with improved matching
+    // This regex ensures we're in an actual JSX tag context by checking for "<tag>" pattern
+    const jsxTextRegex =
+      /(<[A-Za-z][A-Za-z0-9]*[^>]*>)([^<>]*?)(<\/[A-Za-z][A-Za-z0-9]*>)/g;
     let match;
 
     while ((match = jsxTextRegex.exec(text)) !== null) {
-      let content = match[1];
+      let content = match[2]; // The content between the opening and closing tags
 
       // Skip if empty or just whitespace
       if (!content.trim()) {
         continue;
       }
 
-      // Skip if it seems to be a translation key already (typically has format t("key"))
-      if (content.includes("t(") && content.includes(")")) {
+      // Skip if it seems to be a translation key already
+      if (content.includes("{t(") || content.includes("{ t(")) {
         continue;
       }
 
@@ -231,6 +225,18 @@ async function highlightUntranslatedText(editor) {
         continue;
       }
 
+      // Skip if it contains code-like fragments
+      if (
+        content.includes("{") ||
+        content.includes("}") ||
+        content.includes("(") ||
+        content.includes(")") ||
+        content.includes("[") ||
+        content.includes("]")
+      ) {
+        continue;
+      }
+
       // Skip if not likely translatable text
       if (!isLikelyTranslatableText(content)) {
         continue;
@@ -240,7 +246,7 @@ async function highlightUntranslatedText(editor) {
       const { existsInTranslations } = await textExistsInTranslations(content);
 
       // Calculate the actual range of the content in the document
-      const contentStartIndex = match.index + 1 + leadingSpace; // +1 to skip the ">"
+      const contentStartIndex = match.index + match[1].length + leadingSpace;
       const contentEndIndex = contentStartIndex + content.length;
 
       const startPos = document.positionAt(contentStartIndex);
