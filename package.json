@@ -7,7 +7,7 @@
   "icon": "images/icon.png",
   "repository": {
     "type": "git",
-    "url": "https://https://github.com/HarmCoxFCTRY/translation-helper"
+    "url": "https://github.com/HarmCoxFCTRY/NextIntl-Helper"
   },
   "license": "MIT",
   "engines": {
