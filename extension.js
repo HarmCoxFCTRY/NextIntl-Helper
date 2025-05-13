@@ -2,6 +2,7 @@
 const vscode = require("vscode");
 const commandHandlers = require("./commandHandlers");
 const hoverProvider = require("./hoverProvider");
+const completionProvider = require("./completionProvider");
 const textHighlighter = require("./textHighlighter");
 const { setupContext } = require("./utils/fileUtils");
 
@@ -42,6 +43,15 @@ function activate(context) {
     hoverProvider
   );
 
+  // Register completion provider for translation keys
+  const translationCompletionProvider = vscode.languages.registerCompletionItemProvider(
+    ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+    completionProvider,
+    ".", // Trigger completion after typing a dot
+    "\"", // Trigger completion after typing a quote
+    "'" // Trigger completion after typing a single quote
+  );
+
   // Register text highlighter for untranslated strings
   textHighlighter.registerTextHighlighter(context);
 
@@ -51,7 +61,8 @@ function activate(context) {
     insertTranslationKeyDisposable,
     addTranslationKeyDisposable,
     addTranslationKeyFromHoverDisposable,
-    translationHoverProvider
+    translationHoverProvider,
+    translationCompletionProvider
   );
 }
 
