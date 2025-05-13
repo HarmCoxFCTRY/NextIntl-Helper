@@ -2,6 +2,7 @@
 const vscode = require("vscode");
 const commandHandlers = require("./commandHandlers");
 const hoverProvider = require("./hoverProvider");
+const textHighlighter = require("./textHighlighter");
 const { setupContext } = require("./utils/fileUtils");
 
 /**
@@ -40,6 +41,9 @@ function activate(context) {
     ["javascript", "javascriptreact", "typescript", "typescriptreact"],
     hoverProvider
   );
+
+  // Register text highlighter for untranslated strings
+  textHighlighter.registerTextHighlighter(context);
 
   // Add all disposables to the context subscriptions
   context.subscriptions.push(

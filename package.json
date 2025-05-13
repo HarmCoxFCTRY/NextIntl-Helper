@@ -2,7 +2,7 @@
   "name": "translation-helper",
   "displayName": "Translation Helper",
   "description": "Helps with looking up translations in your localization files",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "engines": {
     "vscode": "^1.60.0"
   },
@@ -37,6 +37,18 @@
       {
         "command": "translationHelper.addMissingTranslationsFromHover",
         "title": "Add Missing Translations From Hover"
+      },
+      {
+        "command": "translationHelper.highlightUntranslated",
+        "title": "Highlight Untranslated Text"
+      },
+      {
+        "command": "translationHelper.translateText",
+        "title": "Translate Selected Text"
+      },
+      {
+        "command": "translationHelper.findKeyForText",
+        "title": "Find Translation Key for Text"
       }
     ],
     "keybindings": [
@@ -57,6 +69,12 @@
         "key": "ctrl+alt+a",
         "mac": "cmd+alt+a",
         "when": "editorTextFocus"
+      },
+      {
+        "command": "translationHelper.highlightUntranslated",
+        "key": "ctrl+alt+h",
+        "mac": "cmd+alt+h",
+        "when": "editorTextFocus"
       }
     ],
     "menus": {
@@ -75,8 +93,57 @@
           "command": "translationHelper.addTranslationKey",
           "group": "navigation",
           "when": "editorTextFocus"
+        },
+        {
+          "command": "translationHelper.highlightUntranslated",
+          "group": "navigation",
+          "when": "editorTextFocus && editorLangId =~ /(javascript|typescript)(react)?/"
+        },
+        {
+          "command": "translationHelper.translateText",
+          "group": "navigation",
+          "when": "editorHasSelection && editorLangId =~ /(javascript|typescript)(react)?/"
         }
       ]
+    },
+    "configuration": {
+      "title": "Translation Helper",
+      "properties": {
+        "translationHelper.autoHighlight": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically highlight untranslated text when opening or editing files"
+        },
+        "translationHelper.ignoredPatterns": {
+          "type": "array",
+          "default": [
+            "className",
+            "style",
+            "id",
+            "key",
+            "ref",
+            "type",
+            "name",
+            "value",
+            "href",
+            "src"
+          ],
+          "description": "Patterns to ignore when highlighting untranslated text"
+        },
+        "translationHelper.translationFunction": {
+          "type": "string",
+          "default": "t",
+          "description": "The name of the translation function used in your code (e.g., 't', 'i18n.t')"
+        },
+        "translationHelper.translationFilePatterns": {
+          "type": "array",
+          "default": [
+            "**/messages/*.json",
+            "**/locales/*.json"
+          ],
+          "description": "Glob patterns to locate translation files"
+        }
+      }
     }
   },
   "scripts": {
