@@ -17,22 +17,22 @@ function activate(context) {
 
   // Register all the commands
   const showTranslationDisposable = vscode.commands.registerCommand(
-    "translationHelper.showTranslation",
+    "nextIntlHelper.showTranslation",
     commandHandlers.showTranslation
   );
 
   const insertTranslationKeyDisposable = vscode.commands.registerCommand(
-    "translationHelper.insertTranslationKey",
+    "nextIntlHelper.insertTranslationKey",
     commandHandlers.insertTranslationKey
   );
 
   const addTranslationKeyDisposable = vscode.commands.registerCommand(
-    "translationHelper.addTranslationKey",
+    "nextIntlHelper.addTranslationKey",
     commandHandlers.addTranslationKey
   );
 
   const addTranslationKeyFromHoverDisposable = vscode.commands.registerCommand(
-    "translationHelper.addTranslationKeyFromHover",
+    "nextIntlHelper.addTranslationKeyFromHover",
     commandHandlers.addTranslationKeyFromHover
   );
 

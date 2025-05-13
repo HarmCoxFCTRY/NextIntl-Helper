@@ -62,7 +62,7 @@ const hoverProvider = {
               [
                 `Translation key not found: ${translationKey}`,
                 new vscode.MarkdownString(
-                  `[Add to translation files](command:translationHelper.addTranslationKeyFromHover?${encodeURIComponent(
+                  `[Add to translation files](command:nextIntlHelper.addTranslationKeyFromHover?${encodeURIComponent(
                     JSON.stringify([translationKey, translationFilePaths])
                   )})`
                 ),
@@ -82,7 +82,7 @@ const hoverProvider = {
             markdownStrings.push(`Missing in: ${missingInLangs.join(", ")}`);
             markdownStrings.push(
               new vscode.MarkdownString(
-                `[Add missing translations](command:translationHelper.addMissingTranslationsFromHover?${encodeURIComponent(
+                `[Add missing translations](command:nextIntlHelper.addMissingTranslationsFromHover?${encodeURIComponent(
                   JSON.stringify([
                     translationKey,
                     results,

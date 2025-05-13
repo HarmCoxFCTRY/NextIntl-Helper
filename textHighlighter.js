@@ -50,7 +50,7 @@ function registerTextHighlighter(context) {
 
   // Register command to highlight untranslated text
   const highlightCommand = vscode.commands.registerCommand(
-    "translationHelper.highlightUntranslated",
+    "nextIntlHelper.highlightUntranslated",
     async () => {
       const editor = vscode.window.activeTextEditor;
       if (!editor) {
@@ -64,7 +64,7 @@ function registerTextHighlighter(context) {
 
   // Register command to translate selected text
   const translateTextCommand = vscode.commands.registerCommand(
-    "translationHelper.translateText",
+    "nextIntlHelper.translateText",
     async (text, range) => {
       const editor = vscode.window.activeTextEditor;
       if (!editor) return;
@@ -75,7 +75,7 @@ function registerTextHighlighter(context) {
 
   // Register command to find key for text
   const findKeyForTextCommand = vscode.commands.registerCommand(
-    "translationHelper.findKeyForText",
+    "nextIntlHelper.findKeyForText",
     async (text, range) => {
       await findExistingTranslationKey(text);
     }
@@ -121,7 +121,7 @@ function registerTextHighlighter(context) {
               keysList,
               "",
               new vscode.MarkdownString(
-                `[Use existing key](command:translationHelper.findKeyForText?${encodeURIComponent(
+                `[Use existing key](command:nextIntlHelper.findKeyForText?${encodeURIComponent(
                   JSON.stringify([cleanText])
                 )})`
               ),
@@ -135,7 +135,7 @@ function registerTextHighlighter(context) {
               "This text is not translated.",
               "",
               new vscode.MarkdownString(
-                `[Translate this text](command:translationHelper.translateText?${encodeURIComponent(
+                `[Translate this text](command:nextIntlHelper.translateText?${encodeURIComponent(
                   JSON.stringify([cleanText, range])
                 )})`
               ),
@@ -343,7 +343,7 @@ async function translateTextAtRange(editor, text, range) {
     const { translationFilePaths } = await findTranslationFiles();
 
     // Add the key to translation files
-    const addCommand = "translationHelper.addTranslationKeyWithValue";
+    const addCommand = "nextIntlHelper.addTranslationKeyWithValue";
 
     // Call the command to add the translation key with the provided value
     await vscode.commands.executeCommand(
