@@ -1,0 +1,59 @@
+{
+  "name": "translation-helper",
+  "displayName": "Translation Helper",
+  "description": "Helps with looking up translations in your localization files",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:javascript",
+    "onLanguage:javascriptreact",
+    "onLanguage:typescript",
+    "onLanguage:typescriptreact"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "translationHelper.showTranslation",
+        "title": "Show Translation"
+      },
+      {
+        "command": "translationHelper.insertTranslationKey",
+        "title": "Insert Translation Key"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "translationHelper.showTranslation",
+        "key": "ctrl+alt+t",
+        "mac": "cmd+alt+t",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "translationHelper.insertTranslationKey",
+        "key": "ctrl+alt+i",
+        "mac": "cmd+alt+i",
+        "when": "editorTextFocus"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "translationHelper.showTranslation",
+          "group": "navigation",
+          "when": "editorTextFocus"
+        },
+        {
+          "command": "translationHelper.insertTranslationKey",
+          "group": "navigation",
+          "when": "editorTextFocus"
+        }
+      ]
+    }
+  }
+}
