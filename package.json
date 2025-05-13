@@ -2,7 +2,7 @@
   "name": "next-intl-helper",
   "displayName": "NextIntl Helper",
   "description": "Helps with looking up translations and managing keys in your Next.js projects using Next Intl",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "HarmCox",
   "icon": "images/icon.png",
   "repository": {
